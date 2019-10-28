@@ -3,6 +3,10 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAc
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 
+from Movie import Movie
+import ISearchMovie
+from IMDbSearch import IMDbSearch
+
 class App(QWidget):
 
     def __init__(self):
@@ -28,13 +32,21 @@ class App(QWidget):
         self.button.move(20,80)
         self.button.clicked.connect(self.on_click)
 
+        IMDbSearch().getMovies("aladdin")
+
         self.show()
 
     @pyqtSlot()
     def on_click(self):
-        textboxValue = self.textbox.text()
-        QMessageBox.question(self, 'Message - pythonspot.com', "You typed: " + textboxValue, QMessageBox.Ok, QMessageBox.Ok)
+        title = self.textbox.text()
         self.textbox.setText("")
+        movies = []
+        sources = [IMDbSearch()]
+        for source in sources:
+            movies.extend(source.getMovies(title))
+            # print(movies)
+        for movie in movies:
+            print(movie)
     
 if __name__ == '__main__':
     app = QApplication(sys.argv)
