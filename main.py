@@ -6,6 +6,7 @@ from PyQt5.QtCore import pyqtSlot
 from Shoe import Shoe
 import IScraper
 from NewBalanceScraper import NewBalanceScraper
+from PumaScraper import PumaScraper
 
 class App(QWidget):
 
@@ -32,7 +33,8 @@ class App(QWidget):
 		self.button.move(20,80)
 		self.button.clicked.connect(self.on_click)
 
-		NewBalanceScraper().getShoes("fresh", "Men")
+		# NewBalanceScraper().getShoes("fresh", "Men")
+		PumaScraper().getShoes("roma", "Men")
 
 		self.show()
 
