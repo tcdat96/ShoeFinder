@@ -37,9 +37,9 @@ class App(QWidget):
 		gender = 'Men'
 		sport = 'Running'
 
-		# NewBalanceScraper().getShoes("fresh", gender, sport)
+		NewBalanceScraper().getShoes("fresh", gender, sport)
 		PumaScraper().getShoes("roma", gender, sport)
-		# UnderAmourScraper().getShoes("HOVR", gender, sport)
+		UnderAmourScraper().getShoes("HOVR", gender, sport)
 
 		self.show()
 

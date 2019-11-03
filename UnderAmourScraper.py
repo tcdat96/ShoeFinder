@@ -19,9 +19,12 @@ class UnderAmourScraper(IScraper):
 
 	def getShoes(self, name, gender='', sport=''):
 		soup = IScraper.getData(self, name, gender, sport)
-		shoes = []
 		grid = soup.find('ul', {'class': 'tileset'})
-		items = soup.find_all('li', {'class': 'tile'})
+		if grid is None:
+			return []
+
+		shoes = []
+		items = grid.find_all('li', {'class': 'tile'})
 		for item in items:
 			if isinstance(item, NavigableString):
 				continue

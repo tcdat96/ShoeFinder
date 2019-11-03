@@ -25,8 +25,11 @@ class PumaScraper(IScraper):
 
 	def getShoes(self, name, gender='', sport=''):
 		soup = IScraper.getData(self, name, gender, sport)
-		shoes = []
 		grid = soup.find('div', {'class': 'product-grid'})
+		if grid is None:
+			return []
+
+		shoes = []
 		items = grid.find_all('div', {'class': 'product-tile'})		
 		for item in items:
 			if isinstance(item, NavigableString):

@@ -25,8 +25,12 @@ class NewBalanceScraper(IScraper):
 
 	def getShoes(self, name, gender='', sport=''):
 		soup = IScraper.getData(self, name, gender, sport)
-		shoes = []
-		items = soup.find('ul', {'id': 'product-list-main'}).find_all('li')
+		productList = soup.find('ul', {'id': 'product-list-main'})
+		if productList is None:
+			return []
+
+		shoes = []		
+		items = productList.find_all('li')
 		for item in items:
 			if isinstance(item, NavigableString):
 				continue
