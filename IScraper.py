@@ -5,11 +5,11 @@ from bs4 import BeautifulSoup
 
 class IScraper(abc.ABC):
 	@abc.abstractmethod
-	def getUrl(self, name, gender):
+	def getUrl(self, name, gender, sport):
 		raise NotImplementedError
 
-	def getData(self, name, gender):
-		url = self.getUrl(name, gender)
+	def getData(self, name, gender, sport):
+		url = self.getUrl(name, gender, sport)
 		print(url)
 		http = urllib3.PoolManager()
 		userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
@@ -18,5 +18,5 @@ class IScraper(abc.ABC):
 		return BeautifulSoup(page.content, features='html.parser')
 
 	@abc.abstractmethod
-	def getShoes(self, name, gender):
+	def getShoes(self, name, gender='', sport=''):
 		raise NotImplementedError

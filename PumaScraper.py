@@ -13,12 +13,18 @@ class PumaScraper(IScraper):
 	def __init__(self):
 		self.url = 'https://us.puma.com/en/us/search?'
 
-	def getUrl(self, name, gender):
-		vars = {'q': name}
-		return self.url + urllib.parse.urlencode(vars) + "#pagesize=128"
+	def getUrl(self, name, gender, sport):
+		vars = {'q': name, 'prefn1': 'productDivision', 'prefv1': 'Footwear', 'pagesize': 128}
+		if gender != '':
+			vars['prefn2'] = 'gender'
+			vars['prefv2'] = gender
+		if sport != '':
+			vars['prefn3'] = 'sportName'
+			vars['prefv3'] = sport
+		return self.url + urllib.parse.urlencode(vars)
 
-	def getShoes(self, name, gender):
-		soup = IScraper.getData(self, name, gender)
+	def getShoes(self, name, gender='', sport=''):
+		soup = IScraper.getData(self, name, gender, sport)
 		shoes = []
 		grid = soup.find('div', {'class': 'product-grid'})
 		items = grid.find_all('div', {'class': 'product-tile'})		

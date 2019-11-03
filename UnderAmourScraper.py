@@ -10,14 +10,15 @@ from bs4 import NavigableString
 
 class UnderAmourScraper(IScraper):
 	def __init__(self):
-		self.url = 'https://www.underarmour.com/en-us/search?'
+		self.url = 'https://www.underarmour.com/en-us/search/'
 
-	def getUrl(self, name, gender):
+	def getUrl(self, name, gender, sport):
+		ext = (gender + 's/' if gender != '' else '') + 'footwear' + ('/' + sport if sport != '' else '') + '?'
 		vars = {'q': name}
-		return self.url + urllib.parse.urlencode(vars)
+		return self.url + ext + urllib.parse.urlencode(vars)
 
-	def getShoes(self, name, gender):
-		soup = IScraper.getData(self, name, gender)
+	def getShoes(self, name, gender='', sport=''):
+		soup = IScraper.getData(self, name, gender, sport)
 		shoes = []
 		grid = soup.find('ul', {'class': 'tileset'})
 		items = soup.find_all('li', {'class': 'tile'})
@@ -36,7 +37,7 @@ class UnderAmourScraper(IScraper):
 			if chips is not None:
 				colors = len(chips.find_all('li'))
 			
-			shoe = Shoe(name, gender, price, colors, 'Puma')
+			shoe = Shoe(name, gender, price, colors, 'UnderAmour')
 			shoes.append(shoe)
 			print(shoe)
 

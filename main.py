@@ -34,9 +34,12 @@ class App(QWidget):
 		self.button.move(20,80)
 		self.button.clicked.connect(self.on_click)
 
-		NewBalanceScraper().getShoes("fresh", "Men")
-		PumaScraper().getShoes("roma", "Men")
-		UnderAmourScraper().getShoes("HOVR", "Men")
+		gender = 'Men'
+		sport = 'Running'
+
+		# NewBalanceScraper().getShoes("fresh", gender, sport)
+		PumaScraper().getShoes("roma", gender, sport)
+		# UnderAmourScraper().getShoes("HOVR", gender, sport)
 
 		self.show()
 

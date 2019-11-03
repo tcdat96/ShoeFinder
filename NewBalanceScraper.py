@@ -13,12 +13,18 @@ class NewBalanceScraper(IScraper):
 	def __init__(self):
 		self.url = 'https://www.newbalance.com/search?'
 
-	def getUrl(self, name, gender):
-		vars = {'q': name, 'prefn1': 'genderAndAgeGroupCombo', 'prefn2': 'productClass', 'sz': 48, 'prefv1': gender, 'prefv2': 'Shoes'}
+	def getUrl(self, name, gender, sport):
+		vars = {'q': name, 'prefn1': 'productClass', 'prefv1': 'Shoes', 'sz': 48}
+		if gender != '':
+			vars['prefn2'] = 'genderAndAgeGroupCombo'
+			vars['prefv2'] = gender
+		if sport != '':
+			vars['prefn3'] = 'activity'
+			vars['prefv3'] = sport
 		return self.url + urllib.parse.urlencode(vars)
 
-	def getShoes(self, name, gender):
-		soup = IScraper.getData(self, name, gender)
+	def getShoes(self, name, gender='', sport=''):
+		soup = IScraper.getData(self, name, gender, sport)
 		shoes = []
 		items = soup.find('ul', {'id': 'product-list-main'}).find_all('li')
 		for item in items:
@@ -31,7 +37,7 @@ class NewBalanceScraper(IScraper):
 			price = 0
 			productPricing = product.find('div', {'class': 'product-pricing'})
 			if productPricing is not None:
-				price = productPricing.text.strip().replace('\n', "").replace('\r', "").replace('\t', "")
+				price = productPricing.text.strip().replace('\n', '').replace('\r', '').replace('\t', '')
 
 			colors = 0
 			swatches = product.find('div', {'class': 'swatches'})
