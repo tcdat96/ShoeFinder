@@ -7,6 +7,7 @@ from Shoe import Shoe
 import IScraper
 from NewBalanceScraper import NewBalanceScraper
 from PumaScraper import PumaScraper
+from UnderAmourScraper import UnderAmourScraper
 
 class App(QWidget):
 
@@ -33,8 +34,9 @@ class App(QWidget):
 		self.button.move(20,80)
 		self.button.clicked.connect(self.on_click)
 
-		# NewBalanceScraper().getShoes("fresh", "Men")
+		NewBalanceScraper().getShoes("fresh", "Men")
 		PumaScraper().getShoes("roma", "Men")
+		UnderAmourScraper().getShoes("HOVR", "Men")
 
 		self.show()
 
