@@ -4,7 +4,7 @@ class Shoe():
 	def __init__(self, name, gender, price, numberOfColors, brand):
 		self.name = name
 		self.gender = gender
-		self.price = price
+		self.price = float(price.split(' ')[0][1:])
 		self.numberOfColors = numberOfColors
 		self.brand = brand
 
