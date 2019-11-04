@@ -22,6 +22,9 @@ class UnderAmourScraper(IScraper):
 
 	def getShoes(self, name, gender='', sport=''):
 		soup = IScraper.getData(self, name, gender, sport)
+		if soup is None:
+			return []
+
 		grid = soup.find('ul', {'class': 'tileset'})
 		if grid is None:
 			return []
@@ -41,7 +44,7 @@ class UnderAmourScraper(IScraper):
 				price = price.text.strip('\n\r\t')
 
 			chips = item.find('ul', {'class': 'chips'})
-			colors = len(chips.find_all('li')) if chips is not None else 'N/A'
+			colors = len(chips.find_all('li')) if chips is not None else 0
 
 			shoe = Shoe(name, gender, price, colors, 'UnderAmour')
 			shoes.append(shoe)

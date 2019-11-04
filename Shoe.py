@@ -1,4 +1,6 @@
 class Shoe():
+	score = ''
+
 	def __init__(self, name, gender, price, numberOfColors, brand):
 		self.name = name
 		self.gender = gender

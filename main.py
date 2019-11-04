@@ -10,8 +10,12 @@ import IScraper
 from NewBalanceScraper import NewBalanceScraper
 from PumaScraper import PumaScraper
 from UnderAmourScraper import UnderAmourScraper
+from RunRepeatScraper import RunRepeatScraper
 
 class App(QWidget):
+
+    sources = [NewBalanceScraper(), PumaScraper(), UnderAmourScraper()]
+    ratingSources = [RunRepeatScraper()]
 
     def __init__(self):
         super().__init__()
@@ -103,16 +107,33 @@ class App(QWidget):
         tab = self.createTab(tabName)
 
         shoes = []
-        sources = [NewBalanceScraper(), PumaScraper(), UnderAmourScraper()]
-        for source in sources:
+        for source in self.sources:
             shoes.extend(source.getShoes(name, gender, sport))
-        for shoe in shoes:
-            print(shoe)
+        # for shoe in shoes:
+        #     print(shoe)
         # shoes = [Shoe('name 1','Men','$1','1','NewBalance'),Shoe('name 2','Women','$2','2','Puma'),Shoe('name 3','Kids','$3','3','UnderAmour')]
-        
+
+        if name != '':
+            self.populateRatings(shoes, name)
+
         table = self.populateTable(shoes)
         tab.layout.addWidget(table)
+
+        # hide score column if name is empty
+        if name == '':
+            table.setColumnHidden(4, True)
+
         self.tab1.loading.setText('')
+
+    def populateRatings(self, shoes, name):
+        ratings = []
+        for source in self.ratingSources:
+            ratings.extend(source.getShoes(name))
+
+        for rating in ratings:
+            for shoe in shoes:
+                if shoe.name == rating.name:
+                    shoe.score = rating.score
 
     def createTab(self, title):
         tab = QWidget()
@@ -135,24 +156,31 @@ class App(QWidget):
     def createTable(self, rows):
         table = QTableWidget()
         table.setRowCount(rows)
-        table.setColumnCount(4)
+        table.setColumnCount(5)
         table.setHorizontalHeaderItem(0, QTableWidgetItem('Name'));
         table.setHorizontalHeaderItem(1, QTableWidgetItem('Price'));
         table.setHorizontalHeaderItem(2, QTableWidgetItem('Colors'));
         table.setHorizontalHeaderItem(3, QTableWidgetItem('Brand'));
+        table.setHorizontalHeaderItem(4, QTableWidgetItem('Score'));
         return table
 
     def fillTable(self, table, shoes):
         for i in range(len(shoes)):
             shoe = shoes[i]
-            table.setItem(i,0, QTableWidgetItem(shoe.name))
-            table.setItem(i,1, QTableWidgetItem(shoe.price))
+            table.setItem(i, 0, QTableWidgetItem(shoe.name))
+            table.setItem(i, 1, QTableWidgetItem(shoe.price))
 
-            colorItem = QTableWidgetItem(str(shoe.numberOfColors))
-            colorItem.setTextAlignment(QtCore.Qt.AlignCenter);
-            table.setItem(i,2, colorItem)
+            if shoe.numberOfColors != 0:
+                colorItem = QTableWidgetItem(str(shoe.numberOfColors))
+                colorItem.setTextAlignment(QtCore.Qt.AlignCenter)
+                table.setItem(i, 2, colorItem)
 
-            table.setItem(i,3, QTableWidgetItem(shoe.brand))
+            table.setItem(i, 3, QTableWidgetItem(shoe.brand))
+
+            if shoe.score != '':
+                scoreItem = QTableWidgetItem(str(shoe.score))
+                scoreItem.setTextAlignment(QtCore.Qt.AlignCenter);
+                table.setItem(i, 4, scoreItem)
     
     def closeTab(self, currentIndex):
         self.tabs.removeTab(currentIndex)
