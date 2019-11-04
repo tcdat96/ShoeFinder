@@ -9,12 +9,12 @@ from Shoe import Shoe
 import IScraper
 from NewBalanceScraper import NewBalanceScraper
 from PumaScraper import PumaScraper
-from UnderAmourScraper import UnderAmourScraper
+from UnderArmourScraper import UnderArmourScraper
 from RunRepeatScraper import RunRepeatScraper
 
 class App(QWidget):
 
-    sources = [NewBalanceScraper(), PumaScraper(), UnderAmourScraper()]
+    sources = [NewBalanceScraper(), PumaScraper(), UnderArmourScraper()]
     ratingSources = [RunRepeatScraper()]
 
     def __init__(self):
@@ -127,7 +127,7 @@ class App(QWidget):
             shoes.extend(source.getShoes(name, gender, sport))
         # for shoe in shoes:
         #     print(shoe)
-        # shoes = [Shoe('name 1','Men','$1','1','NewBalance'),Shoe('name 2','Women','$2','2','Puma'),Shoe('name 3','Kids','$3','3','UnderAmour')]
+        # shoes = [Shoe('name 1','Men','$1','1','NewBalance'),Shoe('name 2','Women','$2','2','Puma'),Shoe('name 3','Kids','$3','3','UnderArmour')]
 
         shoes = self.filterPrice(shoes)
 

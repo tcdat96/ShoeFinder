@@ -8,7 +8,7 @@ import json
 from bs4 import BeautifulSoup
 from bs4 import NavigableString
 
-class UnderAmourScraper(IScraper):
+class UnderArmourScraper(IScraper):
 	def __init__(self):
 		self.domain = 'https://www.underarmour.com/en-us'
 
@@ -46,7 +46,7 @@ class UnderAmourScraper(IScraper):
 			chips = item.find('ul', {'class': 'chips'})
 			colors = len(chips.find_all('li')) if chips is not None else 0
 
-			shoe = Shoe(name, gender, price, colors, 'UnderAmour')
+			shoe = Shoe(name, gender, price, colors, 'UnderArmour')
 			shoes.append(shoe)
 
 		return shoes
