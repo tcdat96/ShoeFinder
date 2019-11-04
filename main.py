@@ -21,9 +21,9 @@ class App(QWidget):
         width = size.width()
         height = size.height()
 
-        self.left = int(width / 3)
+        self.left = int(width / 4)
         self.top = int(height / 6)
-        self.width = self.left
+        self.width = self.left * 2
         self.height = self.top * 4
 
         self.initUI()
@@ -33,6 +33,7 @@ class App(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
 
         self.layout = QVBoxLayout(self)
+        self.layout.setAlignment(QtCore.Qt.AlignCenter)
         self.tabs = QTabWidget()
         self.tabs.setTabsClosable(True)
         self.tabs.tabCloseRequested.connect(self.closeTab)
@@ -68,7 +69,7 @@ class App(QWidget):
         self.tab1.sport.addItems(['', 'Lifestyle', 'Running', 'Training', 'Baseball', 'Basketball', 'Soccer'])
         container.addWidget(self.tab1.sport, 1)
         # search button
-        button = QPushButton('Show text', self)
+        button = QPushButton('Search', self)
         button.clicked.connect(self.on_click)
         container.addWidget(button, 1)
 
@@ -91,6 +92,10 @@ class App(QWidget):
         sport = self.tab1.sport.currentText()
         gender = self.tab1.gender.currentText()
 
+        if name == '' and (sport == '' or gender == ''):
+            self.tab1.loading.setText('Either name is not empty or\nboth sport and gender cannot be empty')
+            return
+
         self.tab1.loading.setText('Searching...')
         self.tab1.loading.repaint()
 
@@ -112,6 +117,7 @@ class App(QWidget):
     def createTab(self, title):
         tab = QWidget()
         tab.layout = QVBoxLayout(self)
+        tab.layout.setAlignment(QtCore.Qt.AlignCenter)
         tab.setLayout(tab.layout)
 
         self.tabs.addTab(tab, title)

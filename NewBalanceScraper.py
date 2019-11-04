@@ -11,23 +11,32 @@ from bs4 import NavigableString
 
 class NewBalanceScraper(IScraper):
 	def __init__(self):
-		self.url = 'https://www.newbalance.com/search?'
+		self.domain = 'https://www.newbalance.com'
 
 	def getUrl(self, name, gender, sport):
-		vars = {'q': name, 'prefn1': 'productClass', 'prefv1': 'Shoes', 'sz': 48}
-		if gender != '':
-			vars['prefn2'] = 'genderAndAgeGroupCombo'
-			vars['prefv2'] = gender
-		if sport != '':
-			vars['prefn3'] = 'activity'
-			vars['prefv3'] = sport
-		return self.url + urllib.parse.urlencode(vars)
+		if name != '':
+			vars = {'q': name, 'prefn1': 'productClass', 'prefv1': 'Shoes', 'sz': 48}
+			if gender != '':
+				vars['prefn2'] = 'genderAndAgeGroupCombo'
+				vars['prefv2'] = gender
+			if sport != '':
+				vars['prefn3'] = 'activity'
+				vars['prefv3'] = sport
+			return '%s/search?%s' % (self.domain, urllib.parse.urlencode(vars))
+		else:
+			return '%s/%s/shoes/%s/' % (self.domain, gender, sport)
 
 	def getShoes(self, name, gender='', sport=''):
 		soup = IScraper.getData(self, name, gender, sport)
+		if soup is None:
+			return []
+
 		productList = soup.find('ul', {'id': 'product-list-main'})
 		if productList is None:
-			return []
+			# for only sport and gender case
+			productList = soup.find('div', {'class': 'product-groups'})
+			if not productList:
+				return []
 
 		shoes = []		
 		items = productList.find_all('li')

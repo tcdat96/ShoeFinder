@@ -10,12 +10,15 @@ from bs4 import NavigableString
 
 class UnderAmourScraper(IScraper):
 	def __init__(self):
-		self.url = 'https://www.underarmour.com/en-us/search/'
+		self.domain = 'https://www.underarmour.com/en-us'
 
 	def getUrl(self, name, gender, sport):
-		ext = (gender + 's/' if gender != '' else '') + 'footwear' + ('/' + sport if sport != '' else '') + '?'
-		vars = {'q': name}
-		return self.url + ext + urllib.parse.urlencode(vars)
+		ext = (gender + 's/' if gender != '' else '') + 'footwear' + ('/' + sport if sport != '' else '')
+		if name != '':
+			vars = {'q': name}
+			return '%s/search/%s?%s' % (self.domain, ext, urllib.parse.urlencode(vars))
+		else:
+			return '%s/%s' % (self.domain, ext)
 
 	def getShoes(self, name, gender='', sport=''):
 		soup = IScraper.getData(self, name, gender, sport)
@@ -32,14 +35,14 @@ class UnderAmourScraper(IScraper):
 			name = item.find('div', {'class': 'title'}).text.strip('\n\r\t')
 
 			price = item.find('span', {'class': 'price'})
+			if price is None:
+				price = item.find('span', {'class': 'price-sale'})
 			if price is not None:
 				price = price.text.strip('\n\r\t')
 
-			colors = 0
 			chips = item.find('ul', {'class': 'chips'})
-			if chips is not None:
-				colors = len(chips.find_all('li'))
-			
+			colors = len(chips.find_all('li')) if chips is not None else 'N/A'
+
 			shoe = Shoe(name, gender, price, colors, 'UnderAmour')
 			shoes.append(shoe)
 

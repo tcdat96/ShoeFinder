@@ -11,17 +11,20 @@ from bs4 import NavigableString
 
 class PumaScraper(IScraper):
 	def __init__(self):
-		self.url = 'https://us.puma.com/en/us/search?'
+		self.domain = 'https://us.puma.com/en/us'
 
 	def getUrl(self, name, gender, sport):
-		vars = {'q': name, 'prefn1': 'productDivision', 'prefv1': 'Footwear', 'pagesize': 128}
-		if gender != '':
-			vars['prefn2'] = 'gender'
-			vars['prefv2'] = gender
-		if sport != '':
-			vars['prefn3'] = 'sportName'
-			vars['prefv3'] = sport
-		return self.url + urllib.parse.urlencode(vars)
+		if name != '':
+			vars = {'q': name, 'prefn1': 'productDivision', 'prefv1': 'Footwear', 'pagesize': 128}
+			if gender != '':
+				vars['prefn2'] = 'gender'
+				vars['prefv2'] = gender
+			if sport != '':
+				vars['prefn3'] = 'sportName'
+				vars['prefv3'] = sport
+			return '%s/search?%s' % (self.domain, urllib.parse.urlencode(vars))
+		else:
+			return '%s/%s/shoes/%s#pagesize=128' % (self.domain, gender, sport)
 
 	def getShoes(self, name, gender='', sport=''):
 		soup = IScraper.getData(self, name, gender, sport)
@@ -30,7 +33,7 @@ class PumaScraper(IScraper):
 			return []
 
 		shoes = []
-		items = grid.find_all('div', {'class': 'product-tile'})		
+		items = grid.find_all('div', {'class': 'product-tile'})
 		for item in items:
 			if isinstance(item, NavigableString):
 				continue
@@ -43,11 +46,11 @@ class PumaScraper(IScraper):
 			if priceDiv is not None:
 				price = priceDiv.find('span', {'class': 'value'}).text.strip()
 
-			colors = 0
 			swatches = body.find('div', {'class': 'swatches'})
-			if swatches is not None:
-				colors = len(swatches.find_all('a', {'class': 'swatch__container'}))
-			
+			colors = len(swatches.find_all('a', {'class': 'swatch__container'})) if swatches is not None else 0	
+			if colors == 0:
+				continue
+
 			shoe = Shoe(name, gender, price, colors, 'Puma')
 			shoes.append(shoe)
 
