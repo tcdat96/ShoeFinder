@@ -42,6 +42,5 @@ class UnderAmourScraper(IScraper):
 			
 			shoe = Shoe(name, gender, price, colors, 'UnderAmour')
 			shoes.append(shoe)
-			print(shoe)
 
 		return shoes

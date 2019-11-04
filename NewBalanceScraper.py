@@ -49,7 +49,6 @@ class NewBalanceScraper(IScraper):
 				colors = len(swatches.find_all('a', {'class': 'color'}))
 			
 			shoe = Shoe(name, gender, price, colors, 'NewBalance')
-			print(shoe)
 			shoes.append(shoe)
 
 		return shoes

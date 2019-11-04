@@ -49,7 +49,6 @@ class PumaScraper(IScraper):
 				colors = len(swatches.find_all('a', {'class': 'swatch__container'}))
 			
 			shoe = Shoe(name, gender, price, colors, 'Puma')
-			print(shoe)
 			shoes.append(shoe)
 
 		return shoes
