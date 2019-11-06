@@ -10,12 +10,14 @@ import IScraper
 from NewBalanceScraper import NewBalanceScraper
 from PumaScraper import PumaScraper
 from UnderArmourScraper import UnderArmourScraper
+
 from RunRepeatScraper import RunRepeatScraper
+from RunningShoesGuruScraper import RunningShoesGuruScraper
 
 class App(QWidget):
 
     sources = [NewBalanceScraper(), PumaScraper(), UnderArmourScraper()]
-    ratingSources = [RunRepeatScraper()]
+    ratingSources = [RunRepeatScraper(), RunningShoesGuruScraper()]
 
     def __init__(self):
         super().__init__()
@@ -141,7 +143,7 @@ class App(QWidget):
 
         # ratings
         if name != '':
-            self.populateRatings(shoes, name)
+            shoes = self.populateRatings(shoes, name)
 
         table = self.populateTable(shoes)
         tab.layout.addWidget(table)
@@ -168,10 +170,20 @@ class App(QWidget):
         for source in self.ratingSources:
             ratings.extend(source.getShoes(name))
 
-        for rating in ratings:
-            for shoe in shoes:
-                if shoe.name == rating.name:
-                    shoe.score = rating.score
+        for shoe in shoes: print(shoe)
+        for rating in ratings: print(rating)
+
+        result = []
+        for shoe in shoes:
+            added = False
+            for rating in ratings:
+                if shoe.name == rating.name and shoe.brand == rating.brand:
+                    result.append((shoe, rating.score))
+                    added = True
+            if added is False:
+                result.append((shoe, ''))
+
+        return result
 
     def createTab(self, title):
         tab = QWidget()
@@ -204,7 +216,8 @@ class App(QWidget):
 
     def fillTable(self, table, shoes):
         for i in range(len(shoes)):
-            shoe = shoes[i]
+            shoe = shoes[i][0]
+            score = shoes[i][1]
             table.setItem(i, 0, QTableWidgetItem(shoe.name))
 
             price = '$%.2f' % shoe.price
@@ -217,8 +230,8 @@ class App(QWidget):
 
             table.setItem(i, 3, QTableWidgetItem(shoe.brand))
 
-            if shoe.score != '':
-                scoreItem = QTableWidgetItem(str(shoe.score))
+            if score != '':
+                scoreItem = QTableWidgetItem(str(score))
                 scoreItem.setTextAlignment(QtCore.Qt.AlignCenter);
                 table.setItem(i, 4, scoreItem)
     

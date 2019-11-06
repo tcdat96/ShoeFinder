@@ -46,7 +46,7 @@ class UnderArmourScraper(IScraper):
 			chips = item.find('ul', {'class': 'chips'})
 			colors = len(chips.find_all('li')) if chips is not None else 0
 
-			shoe = Shoe(name, gender, price, colors, 'UnderArmour')
+			shoe = Shoe(name, gender, price, colors, 'Under Armour')
 			shoes.append(shoe)
 
 		return shoes

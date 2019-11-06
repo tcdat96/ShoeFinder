@@ -57,7 +57,7 @@ class NewBalanceScraper(IScraper):
 			if swatches is not None:
 				colors = len(swatches.find_all('a', {'class': 'color'}))
 			
-			shoe = Shoe(name, gender, price, colors, 'NewBalance')
+			shoe = Shoe(name, gender, price, colors, 'New Balance')
 			shoes.append(shoe)
 
 		return shoes
