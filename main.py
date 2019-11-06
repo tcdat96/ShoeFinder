@@ -19,7 +19,7 @@ class App(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.title = 'DbMS Term Project'
+        self.title = 'SneakerFinder'
 
         size = QtWidgets.QDesktopWidget().screenGeometry(-1)
         width = size.width()
@@ -60,6 +60,14 @@ class App(QWidget):
         pixmap = pixmap.scaled(int(self.width / 3), int(self.width / 3), QtCore.Qt.KeepAspectRatio)
         label.setPixmap(pixmap)
         container.addWidget(label, 1)
+
+        # application name
+        nameLabel = QLabel('SneakerFinder', self)
+        nameLabel.setAlignment(QtCore.Qt.AlignCenter)
+        nameLabel.setStyleSheet("font: 30pt Comic Sans MS")
+        container.addWidget(nameLabel)
+
+        container.addStretch(1)
 
         # name
         nameContainer = QHBoxLayout(self)
@@ -104,7 +112,7 @@ class App(QWidget):
         self.tab1.layout.addLayout(QVBoxLayout(self), 1)
 
         self.tab1.setLayout(self.tab1.layout)
-        self.tabs.addTab(self.tab1, "ShoeFinder")
+        self.tabs.addTab(self.tab1, "SneakerFinder")
 
     @QtCore.pyqtSlot()
     def on_click(self):
