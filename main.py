@@ -146,6 +146,8 @@ class App(QWidget):
         # ratings
         if name != '':
             shoes = self.populateRatings(shoes, name)
+        else:
+            shoes = [(shoe, 0) for shoe in shoes]
 
         table = self.populateTable(shoes)
         tab.layout.addWidget(table)
