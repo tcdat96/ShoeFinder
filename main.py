@@ -38,6 +38,8 @@ class App(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
+        self.setFixedSize(self.width, self.height)
+
         self.layout = QVBoxLayout(self)
         self.layout.setAlignment(QtCore.Qt.AlignCenter)
         self.tabs = QTabWidget()
@@ -169,9 +171,6 @@ class App(QWidget):
         ratings = []
         for source in self.ratingSources:
             ratings.extend(source.getShoes(name))
-
-        for shoe in shoes: print(shoe)
-        for rating in ratings: print(rating)
 
         result = []
         for shoe in shoes:
